@@ -28,7 +28,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         NowPlayingViewCtrl.endpoint = NOW_PLAYING
         NowPlayingNavCtrl.tabBarItem.title = "Now Playing"
         NowPlayingNavCtrl.tabBarItem.image = UIImage(named: "video")
-        
 
         let TopRatedNavCtrl = storyboard.instantiateViewControllerWithIdentifier("moviesNavigationController") as! UINavigationController
         let TopRatedViewCtrl = TopRatedNavCtrl.topViewController as! FlicksViewController
@@ -39,18 +38,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let tabController = UITabBarController()
         tabController.viewControllers = [NowPlayingNavCtrl, TopRatedNavCtrl]
         
-        tabController.tabBar.barTintColor = UIColor.whiteColor()
-        tabController.tabBar.tintColor = UIColor.blackColor()
-        
-        
-        
-    
+        tabController.tabBar.barTintColor = UIColor.blackColor()
+        tabController.tabBar.tintColor = UIColor.whiteColor()
         
         window?.rootViewController = tabController
         window?.makeKeyAndVisible()
-        
-        
-        
         
         // Override point for customization after application launch.
         

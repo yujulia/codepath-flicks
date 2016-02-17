@@ -93,7 +93,11 @@ class FlicksViewController: UIViewController, UITableViewDataSource, UICollectio
         searchBar = UISearchBar()
         searchBar.delegate = self
         searchBar.sizeToFit()
+
         self.navigationItem.titleView = searchBar
+
+        self.navigationController?.navigationBar.barTintColor = UIColor.blackColor()
+        self.navigationController?.navigationBar.tintColor = UIColor.whiteColor()
         
         self.tableView.hidden = false
         self.collectionView.hidden = true
