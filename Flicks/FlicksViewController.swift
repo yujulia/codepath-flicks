@@ -13,11 +13,12 @@ import MBProgressHUD
 //private let NOW_PLAYING = "https://api.themoviedb.org/3/movie/now_playing?api_key=\(APIKEY)"
 //private let TOP_RATED = "https://api.themoviedb.org/3/movie/top_rated?api_key=\(APIKEY)"
 
-class FlicksViewController: UIViewController, UITableViewDataSource {
+class FlicksViewController: UIViewController, UITableViewDataSource, UICollectionViewDataSource {
     
     @IBOutlet weak var segmentControl: UISegmentedControl!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var errorPanel: UIView!
+    @IBOutlet weak var collectionView: UICollectionView!
     
     var movies:[Movie]?
     var endpoint: String?
@@ -60,6 +61,7 @@ class FlicksViewController: UIViewController, UITableViewDataSource {
                             
                             self.refreshControl.endRefreshing()
                             self.tableView.reloadData()
+                            self.collectionView.reloadData()
                     }
                 }
                 
@@ -83,9 +85,12 @@ class FlicksViewController: UIViewController, UITableViewDataSource {
         self.tableView.dataSource = self
         self.tableView.delegate = self
         self.tableView.rowHeight = 130
-        self.errorPanel.hidden = true
-//        self.endpoint = NOW_PLAYING 
         
+        self.collectionView.dataSource = self
+        self.tableView.delegate = self
+        
+        self.errorPanel.hidden = true
+
         self.refreshControl.addTarget(self, action: "refresh:", forControlEvents: UIControlEvents.ValueChanged)
         self.tableView.insertSubview(self.refreshControl, atIndex: 0)
         
@@ -118,10 +123,21 @@ class FlicksViewController: UIViewController, UITableViewDataSource {
     }
     
     @IBAction func onSegmentChange(sender: UISegmentedControl) {
-        print(sender.selectedSegmentIndex)
+
+        if sender.selectedSegmentIndex == 0 {
+            tableView.hidden = false
+            collectionView.hidden = true
+        }
+        if sender.selectedSegmentIndex == 1 {
+            tableView.hidden = true
+            collectionView.hidden = false
+        }
         
     }
 }
+
+
+// Table view delegate methods
 
 extension FlicksViewController: UITableViewDelegate {
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -150,6 +166,33 @@ extension FlicksViewController: UITableViewDelegate {
        
     }
 }
+
+// collection view delegate methods
+
+extension FlicksViewController: UICollectionViewDelegate {
+    
+    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if let movies = self.movies {
+            return movies.count
+        } else {
+            return 0
+        }
+    }
+    
+    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+        
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("FlicksCollectionCell", forIndexPath: indexPath) as! FlicksCollectionViewCell
+        
+        if let movies = self.movies {
+            cell.cellData = movies[indexPath.row]
+        }
+        
+        return cell
+    }
+}
+
+
+// Search bar delegate methods
 
 extension FlicksViewController: UISearchBarDelegate {
     func searchBarShouldBeginEditing(searchBar: UISearchBar) -> Bool {
