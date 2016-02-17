@@ -20,6 +20,8 @@ class FlicksDetailViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.detailScroll.contentSize = CGSize(width: 320, height: self.view.frame.height*1.6)
 
         if let detailData = self.detailData {
 
