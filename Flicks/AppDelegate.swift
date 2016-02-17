@@ -8,6 +8,10 @@
 
 import UIKit
 
+private let APIKEY = "229cf9c285d7dcc65abd26a73d9fa804"
+private let NOW_PLAYING = "https://api.themoviedb.org/3/movie/now_playing?api_key=\(APIKEY)"
+private let TOP_RATED = "https://api.themoviedb.org/3/movie/top_rated?api_key=\(APIKEY)"
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -15,7 +19,41 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+        
+        window = UIWindow(frame: UIScreen.mainScreen().bounds)
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        
+        let NowPlayingNavCtrl = storyboard.instantiateViewControllerWithIdentifier("moviesNavigationController") as! UINavigationController
+        let NowPlayingViewCtrl = NowPlayingNavCtrl.topViewController as! FlicksViewController
+        NowPlayingViewCtrl.endpoint = NOW_PLAYING
+        NowPlayingNavCtrl.tabBarItem.title = "Now Playing"
+        NowPlayingNavCtrl.tabBarItem.image = UIImage(named: "video")
+        
+
+        let TopRatedNavCtrl = storyboard.instantiateViewControllerWithIdentifier("moviesNavigationController") as! UINavigationController
+        let TopRatedViewCtrl = TopRatedNavCtrl.topViewController as! FlicksViewController
+        TopRatedViewCtrl.endpoint = TOP_RATED
+        TopRatedNavCtrl.tabBarItem.title = "Top Rated"
+        TopRatedNavCtrl.tabBarItem.image = UIImage(named: "star")
+        
+        let tabController = UITabBarController()
+        tabController.viewControllers = [NowPlayingNavCtrl, TopRatedNavCtrl]
+        
+        tabController.tabBar.barTintColor = UIColor.whiteColor()
+        tabController.tabBar.tintColor = UIColor.blackColor()
+        
+        
+        
+    
+        
+        window?.rootViewController = tabController
+        window?.makeKeyAndVisible()
+        
+        
+        
+        
         // Override point for customization after application launch.
+        
         return true
     }
 

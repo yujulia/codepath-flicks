@@ -9,9 +9,9 @@
 import UIKit
 import MBProgressHUD
 
-private let APIKEY = "229cf9c285d7dcc65abd26a73d9fa804"
-private let NOW_PLAYING = "https://api.themoviedb.org/3/movie/now_playing?api_key=\(APIKEY)"
-private let TOP_RATED = "https://api.themoviedb.org/3/movie/top_rated?api_key=\(APIKEY)"
+//private let APIKEY = "229cf9c285d7dcc65abd26a73d9fa804"
+//private let NOW_PLAYING = "https://api.themoviedb.org/3/movie/now_playing?api_key=\(APIKEY)"
+//private let TOP_RATED = "https://api.themoviedb.org/3/movie/top_rated?api_key=\(APIKEY)"
 
 class FlicksViewController: UIViewController, UITableViewDataSource {
     
@@ -19,11 +19,13 @@ class FlicksViewController: UIViewController, UITableViewDataSource {
     @IBOutlet weak var errorPanel: UIView!
     
     private var movies:[Movie]?
-    private var endpoint: String?
+    public var endpoint: String?
     
     let refreshControl = UIRefreshControl()
     
     func loadData() {
+        
+        print(self.endpoint)
     
         let url = NSURL(string:self.endpoint!)
         let request = NSURLRequest(URL: url!)
@@ -80,7 +82,7 @@ class FlicksViewController: UIViewController, UITableViewDataSource {
         self.tableView.delegate = self
         self.tableView.rowHeight = 130
         self.errorPanel.hidden = true
-        self.endpoint = NOW_PLAYING 
+//        self.endpoint = NOW_PLAYING 
         
         self.refreshControl.addTarget(self, action: "refresh:", forControlEvents: UIControlEvents.ValueChanged)
         self.tableView.insertSubview(self.refreshControl, atIndex: 0)
@@ -130,5 +132,9 @@ extension FlicksViewController: UITableViewDelegate {
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
+    }
+    
+    func tableView(tableView: UITableView, didHighlightRowAtIndexPath indexPath: NSIndexPath) {
+       
     }
 }
