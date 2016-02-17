@@ -19,10 +19,10 @@ class FlicksTableViewCell: UITableViewCell {
         didSet {
             if let data = cellData {
                 
-                self.titleLabel.text = data.title as? String
-                self.descLabel.text = data.overview as? String
+                self.titleLabel.text = data.title
+                self.descLabel.text = data.overview
                 
-                if let urlString = data.thumbnailPoster as? String {
+                if let urlString = data.thumbnailPoster {
                     let url = NSURL(string:urlString)
                     self.thumbnail.setImageWithURL(url!)
                 }

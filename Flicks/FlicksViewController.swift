@@ -16,8 +16,7 @@ class FlicksViewController: UIViewController, UITableViewDataSource {
     
     @IBOutlet weak var tableView: UITableView!
     
-//    private var data: [NSDictionary] = []
-    private var movies:[Movie] = []
+    private var movies:[Movie]?
     
     private func getData(urlString:String) {
     
@@ -69,18 +68,42 @@ class FlicksViewController: UIViewController, UITableViewDataSource {
         // Dispose of any resources that can be recreated.
     }
     
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "detailSegue" {
+            let vc = segue.destinationViewController as? FlicksDetailViewController
+            
+            let indexPath = tableView.indexPathForCell(sender as! UITableViewCell)
+        
+            if let movies = self.movies {
+                let movie = movies[indexPath!.row]
+                if let destination = vc {
+                    destination.detailData = movie
+                }
+            }
+            
+
+            
+            
+
+        }
+    }
+    
 }
 
 extension FlicksViewController: UITableViewDelegate {
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.movies.count
+        if let movies = self.movies {
+            return movies.count
+        } else {
+            return 0
+        }
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("FlicksCell") as! FlicksTableViewCell
         
-        if (self.movies.count > 0) {
-            cell.cellData = self.movies[indexPath.row]
+        if let movies = self.movies {
+            cell.cellData = movies[indexPath.row]
         }
         
         return cell

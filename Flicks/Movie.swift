@@ -10,16 +10,16 @@ import Foundation
 
 public class Movie:NSObject {
     
-    var lowresPoster: NSString?
-    var highresPoster: NSString?
-    var poster: NSString?
-    var overview: NSString?
-    var title: NSString?
-    var thumbnailPoster: NSString?
+    var lowresPoster: String?
+    var highresPoster: String?
+    var poster: String?
+    var overview: String?
+    var title: String?
+    var thumbnailPoster: String?
 
     // Initializes a GitHubRepo from a JSON dictionary
     init(data: NSDictionary) {
-        if let originalTitle = data["original_title"] as? String {
+        if let originalTitle = data["title"] as? String {
             self.title = originalTitle
         }
         
@@ -28,7 +28,7 @@ public class Movie:NSObject {
         }
         
         if let poster = data["poster_path"] as? String {
-            self.thumbnailPoster = "https://image.tmdb.org/t/p/w90\(poster)"
+            self.thumbnailPoster = "https://image.tmdb.org/t/p/w342\(poster)"
             self.lowresPoster = "https://image.tmdb.org/t/p/w45\(poster)"
             self.highresPoster = "https://image.tmdb.org/t/p/original\(poster)"
         }
