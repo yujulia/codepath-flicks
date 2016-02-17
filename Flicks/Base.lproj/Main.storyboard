@@ -53,7 +53,7 @@
                                             <outlet property="descLabel" destination="PUr-eC-eIa" id="B1j-oN-6kE"/>
                                             <outlet property="thumbnail" destination="UuY-tD-96U" id="KIf-Da-psK"/>
                                             <outlet property="titleLabel" destination="EVJ-94-P5X" id="f5u-Ih-v5y"/>
-                                            <segue destination="5l9-9p-eoh" kind="push" identifier="detailSegue" id="GlO-K7-ujV"/>
+                                            <segue destination="5l9-9p-eoh" kind="push" identifier="tableDetailSegue" id="GlO-K7-ujV"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -99,6 +99,7 @@
                                         </view>
                                         <connections>
                                             <outlet property="posterImage" destination="IXl-rc-Mi7" id="bD0-VL-xrI"/>
+                                            <segue destination="5l9-9p-eoh" kind="push" identifier="collectionDetailSegue" id="bDV-bh-ZrD"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
@@ -217,5 +218,8 @@
         <image name="grid" width="15" height="15"/>
         <image name="table" width="15" height="15"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="bDV-bh-ZrD"/>
+    </inferredMetricsTieBreakers>
     <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
 </document>

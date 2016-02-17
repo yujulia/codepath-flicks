@@ -9,10 +9,6 @@
 import UIKit
 import MBProgressHUD
 
-//private let APIKEY = "229cf9c285d7dcc65abd26a73d9fa804"
-//private let NOW_PLAYING = "https://api.themoviedb.org/3/movie/now_playing?api_key=\(APIKEY)"
-//private let TOP_RATED = "https://api.themoviedb.org/3/movie/top_rated?api_key=\(APIKEY)"
-
 class FlicksViewController: UIViewController, UITableViewDataSource, UICollectionViewDataSource {
     
     @IBOutlet weak var segmentControl: UISegmentedControl!
@@ -28,7 +24,7 @@ class FlicksViewController: UIViewController, UITableViewDataSource, UICollectio
     
     func loadData() {
         
-        print(self.endpoint)
+        print("loading data from ", self.endpoint!)
     
         let url = NSURL(string:self.endpoint!)
         let request = NSURLRequest(URL: url!)
@@ -99,6 +95,10 @@ class FlicksViewController: UIViewController, UITableViewDataSource, UICollectio
         searchBar.sizeToFit()
         self.navigationItem.titleView = searchBar
         
+        self.tableView.hidden = false
+        self.collectionView.hidden = true
+        self.segmentControl.selectedSegmentIndex = 0
+        
         loadData()
     }
 
@@ -108,11 +108,22 @@ class FlicksViewController: UIViewController, UITableViewDataSource, UICollectio
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "detailSegue" {
+        if segue.identifier == "tableDetailSegue" {
             let vc = segue.destinationViewController as? FlicksDetailViewController
-            
             let indexPath = tableView.indexPathForCell(sender as! UITableViewCell)
         
+            if let movies = self.movies {
+                let movie = movies[indexPath!.row]
+                if let destination = vc {
+                    destination.detailData = movie
+                }
+            }
+        }
+        if segue.identifier == "collectionDetailSegue" {
+            let vc = segue.destinationViewController as? FlicksDetailViewController
+            let indexPath = collectionView.indexPathForCell(sender as! UICollectionViewCell)
+            
+
             if let movies = self.movies {
                 let movie = movies[indexPath!.row]
                 if let destination = vc {
