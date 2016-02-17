@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MBProgressHUD
 
 private let APIKEY = "229cf9c285d7dcc65abd26a73d9fa804"
 private let NOW_PLAYING = "https://api.themoviedb.org/3/movie/now_playing?api_key=\(APIKEY)"
@@ -15,12 +16,16 @@ private let TOP_RATED = "https://api.themoviedb.org/3/movie/top_rated?api_key=\(
 class FlicksViewController: UIViewController, UITableViewDataSource {
     
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var errorPanel: UIView!
     
     private var movies:[Movie]?
+    private var endpoint: String?
     
-    private func getData(urlString:String) {
+    let refreshControl = UIRefreshControl()
     
-        let url = NSURL(string:urlString)
+    func loadData() {
+    
+        let url = NSURL(string:self.endpoint!)
         let request = NSURLRequest(URL: url!)
         
         let session = NSURLSession(
@@ -29,11 +34,16 @@ class FlicksViewController: UIViewController, UITableViewDataSource {
             delegateQueue:NSOperationQueue.mainQueue()
         )
         
+        MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+        
         let task : NSURLSessionDataTask = session.dataTaskWithRequest(request,
             completionHandler: { (dataOrNil, response, error) in
                 if let data = dataOrNil {
                     if let responseDictionary = try! NSJSONSerialization.JSONObjectWithData(
                         data, options:[]) as? NSDictionary {
+                            
+                            MBProgressHUD.hideHUDForView(self.view, animated: true)
+                            self.errorPanel.hidden = true
                             
                             if let results = responseDictionary["results"] as? NSArray {
                                 var movies: [Movie] = []
@@ -43,13 +53,24 @@ class FlicksViewController: UIViewController, UITableViewDataSource {
                                 
                                 self.movies = movies
                             }
-
+                            
+                            self.refreshControl.endRefreshing()
                             self.tableView.reloadData()
-                
                     }
+                }
+                
+                if let error = error {
+                    print(error)
+                    self.refreshControl.endRefreshing()
+                    MBProgressHUD.hideHUDForView(self.view, animated: true)
+                    self.errorPanel.hidden = false
                 }
         });
         task.resume()
+    }
+    
+    func refresh(refreshControl: UIRefreshControl) {
+        self.loadData()
     }
 
     override func viewDidLoad() {
@@ -57,10 +78,14 @@ class FlicksViewController: UIViewController, UITableViewDataSource {
         
         self.tableView.dataSource = self
         self.tableView.delegate = self
-        
         self.tableView.rowHeight = 130
+        self.errorPanel.hidden = true
+        self.endpoint = NOW_PLAYING 
         
-        getData(NOW_PLAYING)
+        self.refreshControl.addTarget(self, action: "refresh:", forControlEvents: UIControlEvents.ValueChanged)
+        self.tableView.insertSubview(self.refreshControl, atIndex: 0)
+        
+        loadData()
     }
 
     override func didReceiveMemoryWarning() {
@@ -80,14 +105,8 @@ class FlicksViewController: UIViewController, UITableViewDataSource {
                     destination.detailData = movie
                 }
             }
-            
-
-            
-            
-
         }
     }
-    
 }
 
 extension FlicksViewController: UITableViewDelegate {
