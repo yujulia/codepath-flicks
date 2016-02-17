@@ -56,8 +56,13 @@ class FlicksViewController: UIViewController, UITableViewDataSource, UICollectio
                             }
                             
                             self.refreshControl.endRefreshing()
-                            self.tableView.reloadData()
-                            self.collectionView.reloadData()
+                            
+                            if !self.tableView.hidden {
+                                self.tableView.reloadData()
+                            }
+                            if !self.collectionView.hidden {
+                                self.collectionView.reloadData()
+                            }
                     }
                 }
                 
@@ -112,6 +117,7 @@ class FlicksViewController: UIViewController, UITableViewDataSource, UICollectio
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
         if segue.identifier == "tableDetailSegue" {
             let vc = segue.destinationViewController as? FlicksDetailViewController
             let indexPath = tableView.indexPathForCell(sender as! UITableViewCell)
@@ -123,11 +129,11 @@ class FlicksViewController: UIViewController, UITableViewDataSource, UICollectio
                 }
             }
         }
+        
         if segue.identifier == "collectionDetailSegue" {
             let vc = segue.destinationViewController as? FlicksDetailViewController
             let indexPath = collectionView.indexPathForCell(sender as! UICollectionViewCell)
             
-
             if let movies = self.movies {
                 let movie = movies[indexPath!.row]
                 if let destination = vc {
@@ -138,14 +144,15 @@ class FlicksViewController: UIViewController, UITableViewDataSource, UICollectio
     }
     
     @IBAction func onSegmentChange(sender: UISegmentedControl) {
-
         if sender.selectedSegmentIndex == 0 {
             tableView.hidden = false
             collectionView.hidden = true
+            self.tableView.reloadData()
         }
         if sender.selectedSegmentIndex == 1 {
             tableView.hidden = true
             collectionView.hidden = false
+            self.collectionView.reloadData()
         }
         
     }

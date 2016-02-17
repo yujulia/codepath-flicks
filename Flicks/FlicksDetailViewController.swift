@@ -17,7 +17,16 @@ class FlicksDetailViewController: UIViewController {
     @IBOutlet weak var detailTitle: UILabel!
     
     var detailData: Movie?
-
+    
+    func imageLoaded(req: NSURLRequest, response: NSURLResponse?, image: UIImage) -> Void {
+        self.detailImage.image = image
+        
+        if let detailData = self.detailData {
+            let highresURL = NSURL(string: detailData.highresPoster!)
+            self.detailImage.setImageWithURL(highresURL!)
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -26,30 +35,21 @@ class FlicksDetailViewController: UIViewController {
         if let detailData = self.detailData {
 
             detailTitle.text = detailData.title
-            
             detailOverview.text = detailData.overview
             detailOverview.sizeToFit()
             
-            let url = NSURL(string:detailData.highresPoster!)
-            self.detailImage.setImageWithURL(url!)
+            let lowresURL = NSURL(string:detailData.lowresPoster!)
+            let lowresURLRequest = NSURLRequest(URL: lowresURL!)
+        
+            self.detailImage.setImageWithURLRequest(
+                lowresURLRequest,
+                placeholderImage: nil,
+                success: imageLoaded,
+                failure: nil
+            )
+            
         }
     
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }
