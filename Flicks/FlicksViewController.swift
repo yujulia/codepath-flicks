@@ -15,11 +15,13 @@ import MBProgressHUD
 
 class FlicksViewController: UIViewController, UITableViewDataSource {
     
+    @IBOutlet weak var segmentControl: UISegmentedControl!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var errorPanel: UIView!
     
-    private var movies:[Movie]?
-    public var endpoint: String?
+    var movies:[Movie]?
+    var endpoint: String?
+    var searchBar: UISearchBar!
     
     let refreshControl = UIRefreshControl()
     
@@ -87,6 +89,11 @@ class FlicksViewController: UIViewController, UITableViewDataSource {
         self.refreshControl.addTarget(self, action: "refresh:", forControlEvents: UIControlEvents.ValueChanged)
         self.tableView.insertSubview(self.refreshControl, atIndex: 0)
         
+        searchBar = UISearchBar()
+        searchBar.delegate = self
+        searchBar.sizeToFit()
+        self.navigationItem.titleView = searchBar
+        
         loadData()
     }
 
@@ -108,6 +115,11 @@ class FlicksViewController: UIViewController, UITableViewDataSource {
                 }
             }
         }
+    }
+    
+    @IBAction func onSegmentChange(sender: UISegmentedControl) {
+        print(sender.selectedSegmentIndex)
+        
     }
 }
 
@@ -136,5 +148,29 @@ extension FlicksViewController: UITableViewDelegate {
     
     func tableView(tableView: UITableView, didHighlightRowAtIndexPath indexPath: NSIndexPath) {
        
+    }
+}
+
+extension FlicksViewController: UISearchBarDelegate {
+    func searchBarShouldBeginEditing(searchBar: UISearchBar) -> Bool {
+        searchBar.setShowsCancelButton(true, animated: true)
+        return true;
+    }
+    
+    func searchBarShouldEndEditing(searchBar: UISearchBar) -> Bool {
+        searchBar.setShowsCancelButton(false, animated: true)
+        return true;
+    }
+    
+    func searchBarCancelButtonClicked(searchBar: UISearchBar) {
+        searchBar.text = ""
+        searchBar.resignFirstResponder()
+    }
+    
+    func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+//        searchSettings.searchString = searchBar.text
+        searchBar.resignFirstResponder()
+        print("searching for", searchBar.text)
+//        doSearch()
     }
 }

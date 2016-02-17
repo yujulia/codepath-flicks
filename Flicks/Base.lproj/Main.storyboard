@@ -85,11 +85,15 @@
                                     <segment title="" image="grid"/>
                                 </segments>
                                 <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <connections>
+                                    <action selector="onSegmentChange:" destination="BYZ-38-t0r" eventType="valueChanged" id="nyp-Sf-VcA"/>
+                                </connections>
                             </segmentedControl>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="errorPanel" destination="OcX-5a-29r" id="o06-NS-KCY"/>
+                        <outlet property="segmentControl" destination="wqQ-04-jt0" id="ZDy-VX-Zo4"/>
                         <outlet property="tableView" destination="G2Y-iQ-5rJ" id="yxY-hj-eZ9"/>
                     </connections>
                 </viewController>
