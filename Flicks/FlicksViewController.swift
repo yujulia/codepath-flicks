@@ -16,7 +16,8 @@ class FlicksViewController: UIViewController, UITableViewDataSource {
     
     @IBOutlet weak var tableView: UITableView!
     
-    private var data: [NSDictionary] = []
+//    private var data: [NSDictionary] = []
+    private var movies:[Movie] = []
     
     private func getData(urlString:String) {
     
@@ -35,33 +36,32 @@ class FlicksViewController: UIViewController, UITableViewDataSource {
                     if let responseDictionary = try! NSJSONSerialization.JSONObjectWithData(
                         data, options:[]) as? NSDictionary {
                             
-                            var oldData = self.data
-                            if let newData = responseDictionary["results"] as? [NSDictionary] {
-                                oldData.appendContentsOf(newData)
+                            if let results = responseDictionary["results"] as? NSArray {
+                                var movies: [Movie] = []
+                                for oneMovie in results as! [NSDictionary] {
+                                    movies.append(Movie(data: oneMovie))
+                                }
+                                
+                                self.movies = movies
                             }
-                            
-                            self.data = oldData
+
                             self.tableView.reloadData()
+                
                     }
                 }
         });
         task.resume()
     }
-    
-    private func getNowPlaying() {
-        getData(NOW_PLAYING)
-    }
-    
-    private func getTopRated() {
-        getData(TOP_RATED)
-    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.dataSource = self
-        tableView.delegate = self
         
-        getNowPlaying()
+        self.tableView.dataSource = self
+        self.tableView.delegate = self
+        
+        self.tableView.rowHeight = 130
+        
+        getData(NOW_PLAYING)
     }
 
     override func didReceiveMemoryWarning() {
@@ -73,12 +73,16 @@ class FlicksViewController: UIViewController, UITableViewDataSource {
 
 extension FlicksViewController: UITableViewDelegate {
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 30
+        return self.movies.count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("FlicksCell", forIndexPath: indexPath)
-        cell.textLabel!.text = "row \(indexPath.row)"
+        let cell = tableView.dequeueReusableCellWithIdentifier("FlicksCell") as! FlicksTableViewCell
+        
+        if (self.movies.count > 0) {
+            cell.cellData = self.movies[indexPath.row]
+        }
+        
         return cell
     }
 }
