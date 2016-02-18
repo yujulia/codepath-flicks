@@ -126,7 +126,7 @@ class FlicksViewController: UIViewController, UITableViewDataSource, UICollectio
         
         self.tableView.dataSource = self
         self.tableView.delegate = self
-        self.tableView.rowHeight = 130
+        self.tableView.rowHeight = 134
         
         self.collectionView.dataSource = self
         self.tableView.delegate = self

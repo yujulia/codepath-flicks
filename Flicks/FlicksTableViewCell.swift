@@ -18,9 +18,8 @@ class FlicksTableViewCell: UITableViewCell {
     var cellData: Movie?{
         didSet {
             if let data = cellData {
-                print(data.title)
+                
                 if let title = data.title {
-                    print ("TITLE", title)
                     self.titleLabel.text = title
                 }
                 
