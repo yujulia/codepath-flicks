@@ -21,10 +21,17 @@ class FlicksDetailViewController: UIViewController {
     func imageLoaded(req: NSURLRequest, response: NSURLResponse?, image: UIImage) -> Void {
         self.detailImage.image = image
         
-        if let detailData = self.detailData {
-            let highresURL = NSURL(string: detailData.highresPoster!)
-            self.detailImage.setImageWithURL(highresURL!)
-        }
+        UIView.animateWithDuration(0.6,
+            animations:  {() in
+                self.detailImage.alpha = 1.0
+            },
+            completion: {(Bool) in
+                if let detailData = self.detailData {
+                    let highresURL = NSURL(string: detailData.highresPoster!)
+                    self.detailImage.setImageWithURL(highresURL!)
+                }
+            }
+        )
     }
     
     override func viewDidLoad() {
@@ -40,6 +47,7 @@ class FlicksDetailViewController: UIViewController {
             
             let lowresURL = NSURL(string:detailData.lowresPoster!)
             let lowresURLRequest = NSURLRequest(URL: lowresURL!)
+            self.detailImage.alpha = 0.0
         
             self.detailImage.setImageWithURLRequest(
                 lowresURLRequest,
