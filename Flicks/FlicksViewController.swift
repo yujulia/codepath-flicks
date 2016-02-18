@@ -225,13 +225,24 @@ extension FlicksViewController: UITableViewDelegate {
         return cell
     }
     
+    func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
+        let cell = tableView.cellForRowAtIndexPath(indexPath)
+        print("deselected")
+        cell!.backgroundColor = UIColor.redColor()
+
+    }
+    
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-//        print(self.tableView[indexPath])
 //        self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        let cell = tableView.cellForRowAtIndexPath(indexPath)
+        print("selected")
+        cell!.backgroundColor = UIColor.purpleColor()
     }
     
     func tableView(tableView: UITableView, didHighlightRowAtIndexPath indexPath: NSIndexPath) {
-//        print(tableView)
+        
+//        let cell = tableView.cellForRowAtIndexPath(indexPath)
+//        cell?.backgroundColor = UIColor.purpleColor()
     }
 }
 
