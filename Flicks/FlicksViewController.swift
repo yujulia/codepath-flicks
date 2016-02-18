@@ -17,10 +17,50 @@ class FlicksViewController: UIViewController, UITableViewDataSource, UICollectio
     @IBOutlet weak var collectionView: UICollectionView!
     
     var movies:[Movie]?
+    var allMovies: [Movie]?
     var endpoint: String?
     var searchBar: UISearchBar!
-    
+    var previousSearch = ""
+
     let refreshControl = UIRefreshControl()
+    
+    //-------------------------------------------- reload colleciton or table view data whichever is visible
+    
+    func reloadAllData() {
+        if !self.tableView.hidden {
+            self.tableView.reloadData()
+        }
+        if !self.collectionView.hidden {
+            self.collectionView.reloadData()
+        }
+    }
+    
+    //-------------------------------------------- filter the Movies data
+    
+    func searchData(searchTerm: String?) {
+        if let term = searchTerm {
+            
+            if term == previousSearch {
+                return
+            }
+            
+            if term == "" {
+                self.movies = self.allMovies // restore to original response
+            } else {
+                self.movies = self.allMovies
+                
+                self.movies = self.movies?.filter({
+                    $0.title?.lowercaseString.rangeOfString(term.lowercaseString) != nil
+                })
+                
+                previousSearch = term
+            }
+            
+            reloadAllData()
+        }
+    }
+    
+    //-------------------------------------------- load the Movies data
     
     func loadData() {
         
@@ -52,17 +92,14 @@ class FlicksViewController: UIViewController, UITableViewDataSource, UICollectio
                                     movies.append(Movie(data: oneMovie))
                                 }
                                 
+                                self.allMovies = movies
                                 self.movies = movies
+                                self.searchData(self.previousSearch)
                             }
                             
                             self.refreshControl.endRefreshing()
                             
-                            if !self.tableView.hidden {
-                                self.tableView.reloadData()
-                            }
-                            if !self.collectionView.hidden {
-                                self.collectionView.reloadData()
-                            }
+                            self.reloadAllData()
                     }
                 }
                 
@@ -76,10 +113,14 @@ class FlicksViewController: UIViewController, UITableViewDataSource, UICollectio
         task.resume()
     }
     
+    //-------------------------------------------- pull to refresh load data
+    
     func refresh(refreshControl: UIRefreshControl) {
         self.loadData()
     }
 
+    //-------------------------------------------- view did load
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -91,9 +132,13 @@ class FlicksViewController: UIViewController, UITableViewDataSource, UICollectio
         self.tableView.delegate = self
         
         self.errorPanel.hidden = true
+        
+        refreshControl.tintColor = UIColor.whiteColor()
+        refreshControl.backgroundColor = UIColor.blackColor()
 
         self.refreshControl.addTarget(self, action: "refresh:", forControlEvents: UIControlEvents.ValueChanged)
-        self.tableView.insertSubview(self.refreshControl, atIndex: 0)
+//        self.tableView.insertSubview(self.refreshControl, atIndex: 0)
+        self.tableView.addSubview(self.refreshControl)
         
         searchBar = UISearchBar()
         searchBar.delegate = self
@@ -111,10 +156,7 @@ class FlicksViewController: UIViewController, UITableViewDataSource, UICollectio
         loadData()
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
+    //-------------------------------------------- prepare for segue
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
@@ -142,6 +184,8 @@ class FlicksViewController: UIViewController, UITableViewDataSource, UICollectio
             }
         }
     }
+    
+    //-------------------------------------------- toggle between grid and list view
     
     @IBAction func onSegmentChange(sender: UISegmentedControl) {
         if sender.selectedSegmentIndex == 0 {
@@ -193,6 +237,8 @@ extension FlicksViewController: UITableViewDelegate {
 
 extension FlicksViewController: UICollectionViewDelegate {
     
+    //-------------------------------------------- return length of collection
+    
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if let movies = self.movies {
             return movies.count
@@ -200,6 +246,8 @@ extension FlicksViewController: UICollectionViewDelegate {
             return 0
         }
     }
+    
+    //-------------------------------------------- return reusable cell of collection
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         
@@ -217,25 +265,38 @@ extension FlicksViewController: UICollectionViewDelegate {
 // Search bar delegate methods
 
 extension FlicksViewController: UISearchBarDelegate {
+    
+    //-------------------------------------------- search begin
+    
     func searchBarShouldBeginEditing(searchBar: UISearchBar) -> Bool {
         searchBar.setShowsCancelButton(true, animated: true)
         return true;
     }
+    
+    //-------------------------------------------- search end
     
     func searchBarShouldEndEditing(searchBar: UISearchBar) -> Bool {
         searchBar.setShowsCancelButton(false, animated: true)
         return true;
     }
     
+    //-------------------------------------------- search cancel
+    
     func searchBarCancelButtonClicked(searchBar: UISearchBar) {
         searchBar.text = ""
         searchBar.resignFirstResponder()
     }
     
+    //-------------------------------------------- search
+    
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
-//        searchSettings.searchString = searchBar.text
         searchBar.resignFirstResponder()
-        print("searching for", searchBar.text)
-//        doSearch()
+        self.searchData(searchBar.text)
+    }
+    
+    //-------------------------------------------- searc text change
+    
+    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
+        self.searchData(searchBar.text)
     }
 }
