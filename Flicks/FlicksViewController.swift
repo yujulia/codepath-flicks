@@ -24,6 +24,10 @@ class FlicksViewController: UIViewController, UITableViewDataSource, UICollectio
 
     let refreshControl = UIRefreshControl()
     
+    let almostBlack = UIColor(red: 32.0/255, green: 32.0/255, blue: 32.0/255, alpha: 1.0)
+    let darkGray = UIColor(red: 64.0/255, green: 64.0/255, blue: 64.0/255, alpha: 1.0)
+    let pinku = UIColor(red: 232.0/255, green: 101.0/255, blue: 209.0/255, alpha: 1.0)
+    
     //-------------------------------------------- reload colleciton or table view data whichever is visible
     
     func reloadAllData() {
@@ -141,6 +145,11 @@ class FlicksViewController: UIViewController, UITableViewDataSource, UICollectio
         self.tableView.insertSubview(self.refreshControl, atIndex: 0)
         
         searchBar = UISearchBar()
+        searchBar.backgroundColor = UIColor.blackColor()
+        searchBar.barTintColor = UIColor.blackColor()
+        searchBar.translucent = false
+        searchBar.placeholder = "Search"
+      
         searchBar.delegate = self
         searchBar.sizeToFit()
 
@@ -226,23 +235,21 @@ extension FlicksViewController: UITableViewDelegate {
     }
     
     func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
-        let cell = tableView.cellForRowAtIndexPath(indexPath)
-        print("deselected")
-        cell!.backgroundColor = UIColor.redColor()
-
+        if let cell = tableView.cellForRowAtIndexPath(indexPath) {
+            cell.backgroundColor = almostBlack
+        }
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-//        self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        let cell = tableView.cellForRowAtIndexPath(indexPath)
-        print("selected")
-        cell!.backgroundColor = UIColor.purpleColor()
+        if let cell = tableView.cellForRowAtIndexPath(indexPath) {
+            cell.backgroundColor = darkGray
+        }
     }
     
     func tableView(tableView: UITableView, didHighlightRowAtIndexPath indexPath: NSIndexPath) {
-        
-//        let cell = tableView.cellForRowAtIndexPath(indexPath)
-//        cell?.backgroundColor = UIColor.purpleColor()
+        if let cell = tableView.cellForRowAtIndexPath(indexPath) {
+            cell.backgroundColor = pinku
+        }
     }
 }
 
@@ -298,6 +305,7 @@ extension FlicksViewController: UISearchBarDelegate {
     func searchBarCancelButtonClicked(searchBar: UISearchBar) {
         searchBar.text = ""
         searchBar.resignFirstResponder()
+        self.searchData(searchBar.text)
     }
     
     //-------------------------------------------- search
@@ -312,4 +320,5 @@ extension FlicksViewController: UISearchBarDelegate {
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
         self.searchData(searchBar.text)
     }
+    
 }
