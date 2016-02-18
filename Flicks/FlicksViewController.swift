@@ -132,13 +132,13 @@ class FlicksViewController: UIViewController, UITableViewDataSource, UICollectio
         self.tableView.delegate = self
         
         self.errorPanel.hidden = true
+        self.tableView.backgroundColor = UIColor.blackColor()
         
-        refreshControl.tintColor = UIColor.whiteColor()
-        refreshControl.backgroundColor = UIColor.blackColor()
+        self.refreshControl.tintColor = UIColor.whiteColor()
+        self.refreshControl.backgroundColor = UIColor.blackColor()
 
         self.refreshControl.addTarget(self, action: "refresh:", forControlEvents: UIControlEvents.ValueChanged)
-//        self.tableView.insertSubview(self.refreshControl, atIndex: 0)
-        self.tableView.addSubview(self.refreshControl)
+        self.tableView.insertSubview(self.refreshControl, atIndex: 0)
         
         searchBar = UISearchBar()
         searchBar.delegate = self
