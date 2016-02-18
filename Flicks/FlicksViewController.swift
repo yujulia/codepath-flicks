@@ -251,6 +251,12 @@ extension FlicksViewController: UITableViewDelegate {
             cell.backgroundColor = pinku
         }
     }
+    
+    func tableView(tableView: UITableView, didUnhighlightRowAtIndexPath indexPath: NSIndexPath) {
+        if let cell = tableView.cellForRowAtIndexPath(indexPath) {
+            cell.backgroundColor = UIColor.blackColor()
+        }
+    }
 }
 
 // collection view delegate methods

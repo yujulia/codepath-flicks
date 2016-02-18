@@ -35,9 +35,10 @@ class FlicksDetailViewController: UIViewController {
             detailTitle.text = detailData.title
             detailOverview.text = detailData.overview
             detailOverview.sizeToFit()
-            
-            Helpers.loadImage(detailData.lowresPoster!, imageview: self.detailImage, callback: loadHighRes)
-            
+        
+            if let lowposter = detailData.lowresPoster {
+                Helpers.loadImage(lowposter, imageview: self.detailImage, callback: loadHighRes)
+            }
         }
     
     }
