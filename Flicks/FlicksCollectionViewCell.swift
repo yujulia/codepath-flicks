@@ -11,12 +11,12 @@ import UIKit
 class FlicksCollectionViewCell: UICollectionViewCell {
     
     @IBOutlet weak var posterImage: UIImageView!
+    
     var cellData: Movie?{
         didSet {
             if let data = cellData {
                 if let urlString = data.thumbnailPoster {
-                    let url = NSURL(string:urlString)
-                    self.posterImage.setImageWithURL(url!)
+                    Helpers.loadImage(urlString, imageview: self.posterImage)
                 }
                 
             }

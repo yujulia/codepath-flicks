@@ -28,8 +28,7 @@ class FlicksTableViewCell: UITableViewCell {
                 }
 
                 if let urlString = data.thumbnailPoster {
-                    let url = NSURL(string:urlString)
-                    self.thumbnail.setImageWithURL(url!)
+                    Helpers.loadImage(urlString, imageview: self.thumbnail)
                 }
     
             }

@@ -154,6 +154,7 @@ class FlicksViewController: UIViewController, UITableViewDataSource, UICollectio
         self.segmentControl.selectedSegmentIndex = 0
         
         loadData()
+
     }
 
     //-------------------------------------------- prepare for segue
@@ -225,11 +226,12 @@ extension FlicksViewController: UITableViewDelegate {
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
+//        print(self.tableView[indexPath])
+//        self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
     
     func tableView(tableView: UITableView, didHighlightRowAtIndexPath indexPath: NSIndexPath) {
-       
+//        print(tableView)
     }
 }
 
