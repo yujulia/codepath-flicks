@@ -2,7 +2,7 @@
 
 Flicks is a movies app using the [The Movie Database API](http://docs.themoviedb.apiary.io/#).
 
-Time spent: 6 hours spent in total
+Time spent: 18 hours spent in total
 
 ## User Stories
 
@@ -31,6 +31,8 @@ The following **additional** features are implemented:
 ## Video Walkthrough
 
 Here's a walkthrough of implemented user stories:
+
+![flicks demo](flicks.gif) ![flicks demo network error](flicks-error.gif) ![flicks demo iphone6](flicks-6.gif)
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 

@@ -143,6 +143,7 @@ class FlicksViewController: UIViewController, UITableViewDataSource, UICollectio
 
         self.refreshControl.addTarget(self, action: "refresh:", forControlEvents: UIControlEvents.ValueChanged)
         self.tableView.insertSubview(self.refreshControl, atIndex: 0)
+//        self.collectionView.insertSubview(self.refreshControl, atIndex: 0)
         
         searchBar = UISearchBar()
         searchBar.backgroundColor = UIColor.blackColor()
